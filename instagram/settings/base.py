@@ -28,6 +28,11 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+# A list of all the people who get code error notifications.
+ADMINS = [
+    ('Django', 'duo2208@gamil.com')
+]
+
 
 # Application definition
 
@@ -40,8 +45,10 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     # Third Apps
+    'bootstrap4',
     'debug_toolbar',
     # Locals Apps
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -87,6 +94,9 @@ DATABASES = {
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+
+# User
+AUTH_USER_MODEL  = 'accounts.User'
 
 
 # Password validation
@@ -138,3 +148,31 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 INTERNAL_IPS = [
     '127.0.0.1',
 ]
+
+# Secrets file pattern
+import json
+from django.core.exceptions import ImproperlyConfigured
+
+secret_file = os.path.join(BASE_DIR, 'secrets.json')
+
+with open(secret_file, 'r') as f:
+    secret = json.loads(f.read())
+
+def get_secret(setting, secret=secret):
+    try:
+        # 비밀 변수를 가져오거나 예외를 반환한다.
+        return secret[setting]
+    except KeyError:
+        error_msg = "Set the {} environment variable".format(setting)
+        raise ImproperlyConfigured(error_msg)
+
+# Email withSendgrid API
+SENDGRID_API_KEY = get_secret('SENDGRID_API_KEY')
+
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_HOST_USER = 'apikey' # this is exactly the value 'apikey'
+EMAIL_HOST_PASSWORD = SENDGRID_API_KEY
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+
+WELCOME_EMAIL_SENDER = "duo2208@gmail.com"
