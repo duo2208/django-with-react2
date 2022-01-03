@@ -2,15 +2,15 @@
 
 Instagram Clone Coding with 비 SPA 방식
 
-1. User
+#### 1. User
   - Signup
   - Signup email (SendGrid API)
   - Login
   - Logout
   - User Profile
 
-2. Instagram
-  - postting : photo, caption, tag
+#### 2. Instagram
+  - posting : photo, caption, tag
   - Timeline
   - Follow - Unfollow
   - like - dislike
