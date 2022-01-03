@@ -10,7 +10,7 @@ Instagram Clone Coding with 비 SPA 방식
   - User Profile
 
 2. Instagram
-  - post
+  - postting : photo, caption, tag
   - Timeline
   - Follow - Unfollow
   - like - dislike
