@@ -1,9 +1,13 @@
 from django.contrib import messages
 from django.contrib.auth import login as auth_login
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.views import LoginView, logout_then_login
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.views import (
+    LoginView, logout_then_login, PasswordChangeView as AuthPasswordChangeView
+)
 from django.shortcuts import redirect, render
-from .forms import SignupForm, ProfileForm
+from django.urls import reverse_lazy
+from .forms import SignupForm, ProfileForm, PasswordChangeForm
 
 # Create your views here.
 def signup(request):
@@ -41,5 +45,20 @@ def profile_edit(request):
     return render(request, 'accounts/profile_edit_form.html', {
         'form': form,
     })
+
+class PasswordChangeView(LoginRequiredMixin, AuthPasswordChangeView):
+    form_class = PasswordChangeForm
+    success_url = reverse_lazy('password_change_done')
+    template_name = 'accounts/password_change_form.html'
+
+    def form_valid(self, form):
+        messages.success(self.request, "비밀번호를 변경하였습니다.")
+        # Updating the password logs out all other sessions for the user
+        # except the current one.
+        update_session_auth_hash(self.request, form.user)
+        return super().form_valid(form)
+
+password_change  = PasswordChangeView.as_view()
+
 
 

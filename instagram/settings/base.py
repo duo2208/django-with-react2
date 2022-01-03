@@ -50,7 +50,8 @@ INSTALLED_APPS = [
     'django_pydenticon',
     # Locals Apps
     'accounts',
-]
+    'instagramsns',
+] 
 
 MIDDLEWARE = [
     'debug_toolbar.middleware.DebugToolbarMiddleware',
