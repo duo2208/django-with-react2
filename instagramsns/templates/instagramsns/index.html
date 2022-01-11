@@ -1,0 +1,20 @@
+{% extends "instagramsns/layout.html" %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <a href="{% url 'instagramsns:post_new' %}" class="btn btn-primary">새 포스팅 쓰기</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-8">
+                TimeLine
+            </div>
+            <div class="col-sm-4">
+                {% include "instagramsns/timeline_sidebar.html" %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

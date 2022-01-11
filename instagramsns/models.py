@@ -1,5 +1,6 @@
 import re
 from accounts.models import settings
+from django.urls import reverse
 from django.db import models
 
 # Create your models here.
@@ -22,7 +23,7 @@ class Post(models.Model):
         return tag_list
 
     def get_absolute_url(self):
-        pass
+        return reverse("instagramsns:post_detail", args=[self.pk])
 
 class Tag(models.Model):
     name = models.CharField(max_length=50, unique=True)
