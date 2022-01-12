@@ -7,8 +7,10 @@ from .models import Tag, Post
 
 @login_required
 def index(request):
+    # User.objects.all() 은 유연하지 않은 방법
+    suggested_user_list = get_user_model().objects.all().exclude(pk=request.user.pk)
     return render(request, "instagramsns/index.html", {
-
+        "suggested_user_list": suggested_user_list,
     })
 
 @login_required 
