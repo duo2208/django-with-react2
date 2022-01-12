@@ -5,9 +5,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import (
     LoginView, logout_then_login, PasswordChangeView as AuthPasswordChangeView
 )
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 from .forms import SignupForm, ProfileForm, PasswordChangeForm
+from .models import User
 
 # Create your views here.
 def signup(request):
@@ -62,10 +63,23 @@ password_change  = PasswordChangeView.as_view()
 
 @login_required
 def user_follow(request, username):
-    pass
+    follow_user = get_object_or_404(User, username=username, is_active=True)
+    # request.user 가 팔로우하려 합니다.
+    request.user.following_set.add(follow_user)
+    follow_user.follower_set.add(request.user)
+
+    messages.success(request, f"{follow_user}님을 팔로우했습니다.")
+    redirect_url = request.META.get("HTTP_REFERER", "root") # REFERER가 있으면 Referer로, 없으면 root로
+    return redirect(redirect_url)
 
 @login_required
 def user_unfollow(request, username):
-    pass
+    unfollow_user = get_object_or_404(User, username=username, is_active=True)
+    # request.user 언팔로우하려 합니다.
+    request.user.following_set.remove(unfollow_user)
+    unfollow_user.follower_set.remove(request.user)
 
+    messages.success(request, f"{unfollow_user}님을 언팔로우했습니다.")
+    redirect_url = request.META.get("HTTP_REFERER", "root")
+    return redirect(redirect_url)
 

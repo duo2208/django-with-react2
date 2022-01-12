@@ -24,7 +24,7 @@
         <div class="row mt-3">
             {% for post in post_list %}
                 <div class="col-sm-4 mb-3">
-                    <img src="{% thumbnail post.photo 512x512 crop %}" alt="{{ post.caption }}" style="width: 100%; height: 100%;" />
+                    <img src="{% thumbnail post.photo 300x300 crop %}" alt="{{ post.caption }}" style="width: 100%; height: 100%;" />
                 </div>
             {% endfor %}
         </div>

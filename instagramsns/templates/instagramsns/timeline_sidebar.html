@@ -24,6 +24,8 @@
     <div class="card-body">
         {% for suggested_user in suggested_user_list %}
             {% include "instagramsns/timeline_sidebar_user_follow.html" %}
+        {% empty %}
+            no recommendations.
         {% endfor %}
     </div>
 </div>
