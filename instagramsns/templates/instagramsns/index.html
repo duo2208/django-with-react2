@@ -2,19 +2,23 @@
 
 {% block content %}
     <div class="container">
-        <div class="row">
+        <div class="row mb-3">
             <div class="col-sm-12">
-                <a href="{% url 'instagramsns:post_new' %}" class="btn btn-primary">새 포스팅 쓰기</a>
+                <a href="{% url 'instagramsns:post_new' %}" class="btn btn-dark">새 포스팅 쓰기</a>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-sm-8">
-                TimeLine
-                <hr>
-                {{ user.following_set.all }}
+            <div class="col-sm-7">
+                {% for post in post_list %}
+                    <div class="mb-4">
+                        {% include "instagramsns/_post_card.html" %}
+                    </div>
+                {% empty %}
+                    No Posting.
+                {% endfor %}
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-5">
                 {% include "instagramsns/timeline_sidebar.html" %}
             </div>
         </div>

@@ -1,0 +1,7 @@
+{% load humanize %}
+
+<div class="comment">
+    <span style="font-size: 1em; font-weight: 500;">{{ comment.author }}</span>
+    <span style="font-size: 0.85em;">{{ comment.message }}</span>
+    <small class="text-muted">{{ comment.created_at|naturaltime}}</small>
+</div>

@@ -1,0 +1,87 @@
+{% load thumbnail %}
+{% load bootstrap4 humanize instagramsns_tags %}
+
+<div class="card">
+    <div class="card-header">
+        <img src="{{ post.author.avatar_url}}" class="rounded-circle mr-2" style="width: 32px; height: 32px;"/>
+        <a href="{% url 'instagramsns:user_page' post.author.username %}" style="color: inherit;">
+            <span style="font-size: 0.95rem;">{{ post.author.name }}</span>
+        </a>
+    </div>
+
+    <div class="card-body">
+        <img src="{% thumbnail post.photo 610x610 crop %}" alt="{{ post.caption }}" style="width: 100%; height: 100%;" />
+
+        <div class="icon mt-3 mb-3">
+            {% if post|is_like_user:user %}
+                <a href="{% url 'instagramsns:post_dislike' post.pk %}">
+                    <i class="far fa-heart fa-lg mr-2"></i>
+                </a>
+            {% else %}
+                <a href="{% url 'instagramsns:post_like' post.pk %}">
+                    <i class="fas fa-heart fa-lg mr-2"></i>
+                </a>
+            {% endif %}
+
+            <i class="far fa-comment fa-flip-horizontal fa-lg mr-2"></i>
+            <i class="far fa-eject fa-lg"></i>
+        </div>
+
+        <div id="post-{{ post.pk }}-comment-list" class="comment-list mb-1">
+            {% for comment in post.comment_set.all.reverse %}
+                {% include "instagramsns/_comment.html" %}
+            {% endfor %}
+        </div>
+
+        <div class="tag mb-1">
+            {% for tag in post.tag_set.all %}
+                <span class="badge badge-light">
+                    #{{ tag.name }}
+                </span>
+            {% endfor %}
+        </div>
+     
+        <div class="createdat">
+            <a href="{{ post.get_absolute_url }}" class="text-muted">
+                <span style="font-size: 0.9rem;">
+                    {{ post.created_at|naturaltime }}
+                <span>
+            </a>
+        </div>
+    </div>
+
+    <div class="card-footer">
+        <form id="post-{{ post.pk }}-comment-form" action="{% url 'instagramsns:comment_new' post.pk %}" method="POST">
+            {% csrf_token %}
+            {% bootstrap_form comment_form %}
+            <input type="submit" value="게시" class="btn btn-light btn-block">
+        </form>
+
+        <script>
+        $(function() {
+            var form_id = "post-{{ post.pk }}-comment-form";
+            $("#" + form_id).submit(function(e) {
+                e.preventDefault();
+
+                var options = {
+                    success: function(responseText, statusText, xhr, $form) {
+                        console.group("ajaxSubmit response");
+                        console.log(responseText);
+                        console.log(statusText);
+                        console.log(xhr);
+                        console.log($form);
+                        console.groupEnd();
+
+                        $("#post-{{ post.pk }}-comment-list")
+                        .append(
+                            responseText
+                        )
+                    }
+                };
+                $(this).ajaxSubmit(options);
+            });
+            console.log("document ready.");
+        });
+        </script>
+    </div>
+</div>
